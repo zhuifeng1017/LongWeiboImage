@@ -54,37 +54,24 @@
             CGContextSetFillColorWithColor(context, [clr CGColor]);
             
             UIFont *ft = [UIFont systemFontOfSize:kFontSize];
-            
-            NSMutableArray *arrStr = [[brief componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
-            
-            
-            
+            NSUInteger rtWidth = kLongWeiboImageMaxWidth-kFirstFontMarginLeft-kFirstFontMarginLeft;
+            NSUInteger rtHeight = 0;
             
             // 实现换行
-            NSUInteger ftWidth = kLongWeiboImageMaxWidth-kFirstFontMarginLeft-kFirstFontMarginLeft;
-            CGSize ftSize = [brief sizeWithFont:ft];
-            NSUInteger ftSingleHeight = ftSize.height;
-            if (ftSize.width > ftWidth) {
-                NSUInteger rowCount = ftSize.width/ftWidth + (((NSUInteger)ftSize.width)%ftWidth?1:0);
-                ftSize.width = ftWidth;
-                ftSize.height += (ftSingleHeight)*(rowCount-1);
-            }
-            // 查找换行符count
-            NSUInteger newlineCount = 0;
-            NSUInteger charCount = [brief length];
-            for (NSUInteger i=0; i<charCount; ++i) {
-                unichar c = [brief characterAtIndex:i];
-                if (c == 0x000A) {
-                    newlineCount++;
+            NSMutableArray *arrStr = [[brief componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
+            for (NSString * lineStr in arrStr) {
+                CGSize lineSize = [lineStr sizeWithFont:ft];
+                NSUInteger singleCharHeight = lineSize.height;
+                if (lineSize.width > rtWidth) {
+                    NSUInteger rowCount = lineSize.width/rtWidth + (((NSUInteger)lineSize.width)%rtWidth?1:0);
+                    lineSize.height += (singleCharHeight)*(rowCount-1);
                 }
-            }
-            if (newlineCount != 0) {
-                ftSize.height += (newlineCount*ftSingleHeight);
+                rtHeight += (lineSize.height);
             }
             
-            CGRect ftRect = CGRectMake(kFirstFontMarginLeft, drawY+kFirstFontMarginTop, ftSize.width, ftSize.height);
+            CGRect ftRect = CGRectMake(kFirstFontMarginLeft, drawY+kFirstFontMarginTop, rtWidth, rtHeight);
             [brief drawInRect:ftRect withFont:ft lineBreakMode:UILineBreakModeWordWrap alignment:NSTextAlignmentLeft];
-            drawY += (ftSize.height+kLastFontMarginBottom);
+            drawY += (rtHeight+kLastFontMarginBottom);
         }else if([objImg isKindOfClass:[NSData class]]){
             
         }else if([objImg isKindOfClass:[UIImage class]]){

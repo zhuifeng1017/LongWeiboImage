@@ -15,7 +15,7 @@
 // 文字边距
 #define kFirstFontMarginLeft 10 // 第一行文字左边距
 #define kFirstFontMarginTop 10  // 第一行文字上边距
-#define kLastFontMarginBottom 50   // 最后一行文字底边距
+#define kLastFontMarginBottom 30   // 最后一行文字底边距
 #define kFontMarginTop 10   // 文字边距
 
 // 字体大小
