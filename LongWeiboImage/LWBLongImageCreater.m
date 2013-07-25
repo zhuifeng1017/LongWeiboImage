@@ -16,6 +16,8 @@
         _arrElement = [[NSMutableArray alloc]initWithCapacity:0];
         _width = kLongWeiboImageMaxWidth;
         _height = -1;
+        _wbTitle = @"分享";
+        _logoText = @"Where's your logo!";
     }
     return self;
 }
@@ -34,6 +36,14 @@
     CGContextFillRect(context, CGRectMake(0, 0, kLongWeiboImageMaxWidth, 8000));
     
     NSUInteger drawY = 0;
+    // draw title
+    CGRect rtTitle = CGRectMake(0, drawY, kLongWeiboImageMaxWidth, kLongWeiboTitleAreaHeigth);
+    CGContextSetRGBFillColor(context, 1.0, 1.0, 0, 1.0); // yellow
+    CGContextFillRect(context, rtTitle);
+    CGContextSetRGBFillColor(context, 0, 0, 0, 1.0); // black
+    UIFont *ftTitle = [UIFont systemFontOfSize:kLogoFontSize];
+    [self.wbTitle drawInRect:rtTitle withFont:ftTitle lineBreakMode:UILineBreakModeWordWrap alignment:NSTextAlignmentCenter];
+    drawY += rtTitle.size.height;
     
     UIImage *retImg = nil;
     for (NSDictionary *dic in _arrElement) {
@@ -43,12 +53,11 @@
             UIImage *img = [[UIImage alloc]initWithContentsOfFile:(NSString*)objImg];
             UIImage *dstImg = [LWBLongImageCreater scaleImageWithImage:img]; // 缩放
         
-            NSUInteger w = dstImg.size.width;
+            NSUInteger w = dstImg.size.width;   // 缩放后图片宽高
             NSUInteger h =  dstImg.size.height;
-            //CGContextClipToRect(context, CGRectMake(drawX, drawY, kLongWeiboImageMaxWidth, h+100)); //设置当前绘图环境到矩形框
         
-            [dstImg drawInRect:CGRectMake(0, drawY, w, h)];
-            drawY += h;
+            [dstImg drawInRect:CGRectMake(0, drawY, w, h)]; // draw dest image
+            drawY += h; // update Y Postion
             
             UIColor *clr = [UIColor colorWithWhite:0 alpha:1];
             CGContextSetFillColorWithColor(context, [clr CGColor]);
@@ -60,25 +69,35 @@
             // 实现换行
             NSMutableArray *arrStr = [[brief componentsSeparatedByCharactersInSet: [NSCharacterSet newlineCharacterSet]] mutableCopy];
             for (NSString * lineStr in arrStr) {
-                CGSize lineSize = [lineStr sizeWithFont:ft];
-                NSUInteger singleCharHeight = lineSize.height;
+                CGSize lineSize = [lineStr sizeWithFont:ft];    // one line chars size
+                NSUInteger singleCharHeight = lineSize.height;  // one char height
                 if (lineSize.width > rtWidth) {
                     NSUInteger rowCount = lineSize.width/rtWidth + (((NSUInteger)lineSize.width)%rtWidth?1:0);
                     lineSize.height += (singleCharHeight)*(rowCount-1);
                 }
                 rtHeight += (lineSize.height);
             }
-            
-            CGRect ftRect = CGRectMake(kFirstFontMarginLeft, drawY+kFirstFontMarginTop, rtWidth, rtHeight);
+            drawY += kFirstFontMarginTop; // update Y Postion
+            CGRect ftRect = CGRectMake(kFirstFontMarginLeft, drawY, rtWidth, rtHeight);
             [brief drawInRect:ftRect withFont:ft lineBreakMode:UILineBreakModeWordWrap alignment:NSTextAlignmentLeft];
-            drawY += (rtHeight+kLastFontMarginBottom);
+            drawY += (rtHeight+kLastFontMarginBottom); // update Y Postion
         }else if([objImg isKindOfClass:[NSData class]]){
             
         }else if([objImg isKindOfClass:[UIImage class]]){
             
         }
     }
+    // draw logo
+    CGRect rtLogo = CGRectMake(0, drawY, kLongWeiboImageMaxWidth, kLongWeiboLogoAreaHeigth);
+    CGContextSetRGBFillColor(context, 1.0, 1.0, 0, 1.0); // yellow
+    CGContextFillRect(context, rtLogo);
     
+    CGContextSetRGBFillColor(context, 0, 0, 0, 1.0); // black
+    UIFont *ftLogo = [UIFont systemFontOfSize:kLogoFontSize];
+    [self.logoText drawInRect:rtLogo withFont:ftLogo lineBreakMode:UILineBreakModeWordWrap alignment:NSTextAlignmentCenter];
+    drawY += rtLogo.size.height;
+    
+    // clip image
     CGRect clipRect = CGRectMake(0, 0, kLongWeiboImageMaxWidth, drawY);
     CGImageRef imgRefOri =  CGBitmapContextCreateImage(context);
     CGImageRef imgRef = CGImageCreateWithImageInRect(imgRefOri, clipRect);

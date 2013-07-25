@@ -37,7 +37,7 @@
     NSDictionary *dic3 = [NSDictionary dictionaryWithObjectsAndKeys:path3,kLongWeiboImage,@"关于UIFont\n和计算字符\n串的\n高度和宽度",kLongWeiboImageBrief,nil];
     NSDictionary *dic4 = [NSDictionary dictionaryWithObjectsAndKeys:path4,kLongWeiboImage,@"关于UIFont和计算\n字符串的高\n度和宽度",kLongWeiboImageBrief,nil];
     NSDictionary *dic5 = [NSDictionary dictionaryWithObjectsAndKeys:path5,kLongWeiboImage,@"关于UIFont\n和计算字符串的高度\n和宽度",kLongWeiboImageBrief,nil];
-    NSDictionary *dic6 = [NSDictionary dictionaryWithObjectsAndKeys:path1,kLongWeiboImage,@"关于UIFont和计算\n字符串的高度和宽度",kLongWeiboImageBrief,nil];
+    NSDictionary *dic6 = [NSDictionary dictionaryWithObjectsAndKeys:path1,kLongWeiboImage,@"关于",kLongWeiboImageBrief,nil];
     
     [creater addElement:dic1];
     [creater addElement:dic2];

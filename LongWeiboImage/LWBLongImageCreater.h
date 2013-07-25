@@ -12,6 +12,9 @@
 #define kLongWeiboImageMaxHeight    800
 #define kLongWeiboImageMaxSize      51200
 
+#define kLongWeiboLogoAreaHeigth 60
+#define kLongWeiboTitleAreaHeigth 60
+
 // 文字边距
 #define kFirstFontMarginLeft 10 // 第一行文字左边距
 #define kFirstFontMarginTop 10  // 第一行文字上边距
@@ -20,11 +23,14 @@
 
 // 字体大小
 #define kFontSize   30
+#define kLogoFontSize 50
+#define kTitleFontSize 50
+//#define kLogoAreaClr
+
 
 
 #define kLongWeiboImage             @"img"
 #define kLongWeiboImageBrief        @"imgBrief"
-
 
 @interface LWBLongImageCreater : NSObject
 {
@@ -33,6 +39,8 @@
 
 @property (assign, nonatomic) NSUInteger width;   // 图片宽，最大640
 @property (assign, nonatomic) NSUInteger height; // 图片高
+@property (copy, nonatomic) NSString *logoText;
+@property (copy, nonatomic) NSString *wbTitle; // 标题
 
 
 - (void) addElement:(NSDictionary*) element;
